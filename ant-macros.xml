@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns:artifact="urn:maven-artifact-ant">
 
+	<taskdef resource="net/sf/antcontrib/antlib.xml" classpath="lib/ant-contrib-1.0b2.jar" />
 	<path id="maven-ant-tasks.classpath" path="lib/maven-ant-tasks-2.1.3.jar" />
 	<typedef resource="org/apache/maven/artifact/ant/antlib.xml" uri="urn:maven-artifact-ant" classpathref="maven-ant-tasks.classpath" />
 
