@@ -21,16 +21,16 @@
 		<maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
 		<build.timestamp>${maven.build.timestamp}</build.timestamp>
 
-		<aspectjweaver.version>1.8.8</aspectjweaver.version>
-		<javax.validation.version>1.0.0.GA</javax.validation.version>
-		<slf4j.version>1.7.6</slf4j.version>
-		<spring.version>4.1.1.RELEASE</spring.version>
-		<junit.version>4.11</junit.version>
-		<logback.version>1.1.1</logback.version>
-		<hibernate-core.version>4.3.6.Final</hibernate-core.version>
-		<hibernate-validator.version>4.3.2.Final</hibernate-validator.version>
-		<servlet.version>2.5</servlet.version>
-		<cxf.version>3.0.7</cxf.version>
+		<aspectjweaver.version>1.8.10</aspectjweaver.version>
+		<javax.validation.version>1.1.0.Final</javax.validation.version>
+		<slf4j.version>1.7.25</slf4j.version>
+		<spring.version>4.3.8.RELEASE</spring.version>
+		<junit.version>4.12</junit.version>
+		<logback.version>1.1.11</logback.version>
+		<hibernate-core.version>5.0.12.Final</hibernate-core.version>
+		<hibernate-validator.version>5.3.5.Final</hibernate-validator.version>
+		<servlet.version>3.1.0</servlet.version>
+		<cxf.version>3.1.11</cxf.version>
 	</properties>
 
 	<dependencies>
@@ -121,6 +121,11 @@
 			<version>${hibernate-validator.version}</version>
 		</dependency>
 		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-entitymanager</artifactId>
+		    <version>${hibernate-core.version}</version>
+		</dependency>	
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-orm</artifactId>
 			<version>${spring.version}</version>
@@ -131,7 +136,7 @@
 		<!-- WISE Web -->
 		<dependency>
 			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
+			<artifactId>javax.servlet-api</artifactId>
 			<version>${servlet.version}</version>
 			<scope>provided</scope>
 		</dependency>
@@ -305,7 +310,7 @@
 			<plugin>
 				<groupId>ir.asta.wise</groupId>
 				<artifactId>wise-maven-plugin</artifactId>
-				<version>7.7.0.WS</version>
+				<version>7.9.0.WS</version>
 			</plugin>
 		</plugins>
 		    	

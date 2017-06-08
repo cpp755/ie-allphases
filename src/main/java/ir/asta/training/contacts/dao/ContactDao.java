@@ -2,21 +2,20 @@ package ir.asta.training.contacts.dao;
 
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-
-import org.hibernate.SessionFactory;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import ir.asta.training.contacts.entities.ContactEntity;
 
 @Named("contactDao")
 public class ContactDao {
 
-	@Inject
-	SessionFactory sessionFactory;
+	@PersistenceContext
+	private EntityManager entityManager;
 	
 	public void save(ContactEntity entity) {
-		sessionFactory.getCurrentSession().save(entity);
+		entityManager.persist(entity);
 	}
 	
 	public ContactEntity load(Long id) {
