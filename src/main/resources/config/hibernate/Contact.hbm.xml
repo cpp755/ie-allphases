@@ -1,9 +1,0 @@
-<?xml version="1.0"?><!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
-<hibernate-mapping >
-  <class name="ir.asta.training.contacts.entities.ContactEntity" table="WISE_CONTACT">
-    <id name="id" column="CONTACT_ID" type="java.lang.Long">
-      <generator class="native"/>
-    </id>
-    <property name="name" type="java.lang.String" column="NAME_" not-null="true" />
-  </class>
-</hibernate-mapping>
