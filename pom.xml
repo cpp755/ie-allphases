@@ -307,11 +307,6 @@
 					 -->
 				</configuration>
 			</plugin>
-			<plugin>
-				<groupId>ir.asta.wise</groupId>
-				<artifactId>wise-maven-plugin</artifactId>
-				<version>7.9.0.WS</version>
-			</plugin>
 		</plugins>
 		    	
 	</build>
