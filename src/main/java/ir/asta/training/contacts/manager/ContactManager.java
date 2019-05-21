@@ -58,4 +58,29 @@ public class ContactManager {
 	}
 
 	
+	@Transactional
+	public void userToggle(String s){
+		JSONObject jsonObject = new JSONObject(s);
+		if (jsonObject != null){
+			dao.userToggle(jsonObject.getString("user"));
+		}
+	}
+
+	public List<UserEntity> validCaseReceiver(){
+		return dao.validCaseReceiver();
+	}
+
+	public List<UserEntity> userManagement(){
+		return dao.userManagement();
+	}
+
+	public List<CaseEntity> getAllCases(){
+		return dao.getAllCases();
+	}
+
+    @Transactional
+    public int saveCase(CaseEntity caseEntity){
+        return dao.saveCase(caseEntity);
+    }
+
 }
