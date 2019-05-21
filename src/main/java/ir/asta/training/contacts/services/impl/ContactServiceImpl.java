@@ -73,4 +73,73 @@ public class ContactServiceImpl implements ContactService {
 		}
 		return Response.ok("خطا در تغییر رمز عبور.").entity("خطا در تغییر رمز عبور.").build();
 	}
+
+	@Override
+	public void userToggle(String s) {
+		manager.userToggle(s);
+	}
+
+    @Override
+    public Response validCaseReceiver() {
+        List<UserEntity> validreceiver =  manager.validCaseReceiver();
+        if (validreceiver != null)
+        {
+            String json = new Gson().toJson(validreceiver);
+            json = "{\"main\" : " + json + "}";
+            JSONObject usersJsonObject = new JSONObject(json);
+            JSONObject returnedObj = new JSONObject();
+            returnedObj.put("main",new JSONArray());
+            for (int i=0; i< ((JSONArray)usersJsonObject.get("main")).length(); i++){
+                String user = ((JSONArray)usersJsonObject.get("main")).getJSONObject(i).getString("username");
+                ((JSONArray)returnedObj.get("main")).put(user);
+            }
+            System.out.println(returnedObj.toString());
+            return Response.ok(returnedObj.toString()).entity(returnedObj.toString()).build();
+        }
+        return null;
+    }
+
+	@Override
+	public Response userManagement() {
+		List<UserEntity> userEntities =manager.userManagement();
+		if (userEntities != null)
+		{
+			String json = new Gson().toJson(userEntities);
+			json = "{\"main\" : " + json + "}";
+			JSONObject usersJsonObject = new JSONObject(json);
+			for (int i=0; i< ((JSONArray)usersJsonObject.get("main")).length(); i++){
+				((JSONArray)usersJsonObject.get("main")).getJSONObject(i).remove("pass");
+			}
+			return Response.ok(usersJsonObject.toString()).entity(usersJsonObject.toString()).build();
+		}
+		return null;
+	}
+
+	@Override
+	public Response getAllCases() {
+		List<CaseEntity> caseEntities = manager.getAllCases();
+		if (caseEntities != null)
+		{
+			String json = new Gson().toJson(caseEntities);
+			json = "{\"main\" : " + json + "}";
+			JSONObject usersJsonObject = new JSONObject(json);
+			return Response.ok(usersJsonObject.toString()).entity(usersJsonObject.toString()).build();
+		}
+		return null;
+	}
+
+    @Override
+    public Response saveCase(CaseEntity caseEntity) {
+        int status = -11;
+        try {
+            status = manager.saveCase(caseEntity);
+            if (status > 0){
+                return Response.ok("مورد با موفقیت ثبت شد.").entity("مورد با موفقیت ثبت شد.").build();
+            }
+            return Response.ok("خطا در ثبت مورد").entity("خطا در ثبت مورد").build();
+        }
+        catch (Exception e){
+            return Response.ok("خطا در ثبت مورد").entity("خطا در ثبت مورد").build();
+        }
+    }
 }
