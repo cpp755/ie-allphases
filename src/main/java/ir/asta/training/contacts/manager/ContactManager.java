@@ -5,10 +5,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ir.asta.training.contacts.entities.CaseEntity;
+import org.json.JSONObject;
 import org.springframework.transaction.annotation.Transactional;
 
 import ir.asta.training.contacts.dao.ContactDao;
-import ir.asta.training.contacts.entities.ContactEntity;
+import ir.asta.training.contacts.entities.UserEntity;
 
 @Named("contactManager")
 public class ContactManager {
@@ -17,18 +19,42 @@ public class ContactManager {
 	ContactDao dao;
 
 	@Transactional
-	public void save(ContactEntity entity) {
-		dao.save(entity);
+	public int signUp(UserEntity userEntity){
+		return dao.signUp(userEntity);
 	}
 
-	public ContactEntity load(Long id) {
-		// TODO implement this method
+	@Transactional
+	public UserEntity signIn(String s) {
+		JSONObject jsonObject = new JSONObject(s);
+		if (jsonObject != null){
+			return dao.signIn(jsonObject.getString("username"), jsonObject.getString("pass"));
+		}
 		return null;
 	}
-	
-	public List<ContactEntity> findAll() {
-		// TODO implement this method
-		return null;
+
+	@Transactional
+	public void chooseSatisfaction(String s) {
+		JSONObject jsonObject = new JSONObject(s);
+		if (jsonObject != null){
+			dao.chooseSatisfaction(jsonObject.getString("sender"), jsonObject.getString("receiver"), jsonObject.getString("title"), jsonObject.getString("condition"), jsonObject.getString("satisfied"));
+		}
+	}
+
+	@Transactional
+	public void refreshcase(String s) {
+		JSONObject jsonObject = new JSONObject(s);
+		if (jsonObject != null){
+			dao.refreshcase(jsonObject.getString("sender"), jsonObject.getString("title") ,jsonObject.getString("lastreceiver"), jsonObject.getString("nextreceiver"), jsonObject.getString("paraf"), jsonObject.getString("lastcondition"), jsonObject.getString("nextcondition"));
+		}
+	}
+
+	@Transactional
+	public int changePass(String s){
+		JSONObject jsonObject = new JSONObject(s);
+		if (jsonObject != null){
+			return dao.changePass(jsonObject.getString("username"), jsonObject.getString("pass"));
+		}
+		return -1;
 	}
 
 	
