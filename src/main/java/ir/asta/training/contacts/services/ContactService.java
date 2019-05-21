@@ -40,5 +40,32 @@ public interface ContactService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces({MediaType.TEXT_PLAIN,MediaType.TEXT_HTML,MediaType.APPLICATION_JSON})
 	public Response changePass(String s) throws JsonProcessingException;
+
+	@POST
+	@Path("/usertoggle")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.TEXT_PLAIN,MediaType.TEXT_HTML,MediaType.APPLICATION_JSON})
+	public void userToggle(String s) throws JsonProcessingException;
+
+	@GET
+	@Path("/validcasereceiver")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response validCaseReceiver();
+
+	@GET
+	@Path("/usermanagement")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response userManagement();
+
+	@GET
+	@Path("/getallcases")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getAllCases();
+
+	@POST
+	@Path("/savecase")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces({MediaType.TEXT_PLAIN,MediaType.TEXT_HTML,MediaType.APPLICATION_JSON})
+	public Response saveCase(CaseEntity caseEntity);
 	
 }
