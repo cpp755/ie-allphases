@@ -89,5 +89,80 @@ public class ContactDao {
 			return -1;
 		}
 	}
+
+	public void userToggle(String user){
+		Query query;
+		try {
+			query = entityManager.createQuery(String.format("select u from UserEntity u where u.username = '%s'", user));
+			List<UserEntity> list = query.getResultList();
+			UserEntity userEntity = list.get(0);
+
+			if (userEntity.getVerified() == "0" || userEntity.getVerified().trim().charAt(0) == '0'){
+				query = entityManager.createQuery(String.format("update UserEntity u set u.verified = '1' where u.username = '%s'", user));
+				query.executeUpdate();
+			}else {
+				query = entityManager.createQuery(String.format("update UserEntity u set u.verified = '0' where u.username = '%s'", user));
+				query.executeUpdate();
+			}
+		}
+		catch (Exception e){
+		}
+	}
+
+	public List<UserEntity> validCaseReceiver(){
+		Query query;
+		try {
+			query = entityManager.createQuery(String.format("Select u from UserEntity u where (u.role = '1' or u.role = '3') and u.verified = '1'"));
+			List<UserEntity> list = query.getResultList();
+			if (list.size() == 0){
+				return null;
+			}
+			return list;
+		}
+		catch (Exception e){
+			return null;
+		}
+	}
+
+	public List<UserEntity> userManagement(){
+		Query query;
+		try {
+			query = entityManager.createQuery(String.format("Select u from UserEntity u"));
+			List<UserEntity> list = query.getResultList();
+			if (list.size() == 0){
+				return null;
+			}
+			return list;
+		}
+		catch (Exception e){
+			return null;
+		}
+	}
+
+	public List<CaseEntity> getAllCases(){
+		Query query;
+		try {
+			query = entityManager.createQuery(String.format("Select c from CaseEntity c"));
+			List<CaseEntity> list = query.getResultList();
+			if (list.size() == 0){
+				return null;
+			}
+			return list;
+		}
+		catch (Exception e){
+			return null;
+		}
+
+	}
+
+    public int saveCase(CaseEntity caseEntity){
+        try{
+            entityManager.persist(caseEntity);
+            return 1;
+        }
+        catch (Exception e){
+            return -1;
+        }
+    }
 	
 }
