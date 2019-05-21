@@ -1,0 +1,318 @@
+Index: kartablHistoryPage.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- kartablHistoryPage.html	(date 1556445486804)
++++ kartablHistoryPage.html	(date 1556445486804)
+@@ -3,17 +3,24 @@
+ <head>
+     <meta charset="UTF-8">
+     <title>kartablHistoryPage</title>
+-    <meta content="width=device-width, initial-scale=1" name="viewport">
+-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
++
++    <link rel="stylesheet" href="css/global.css" type="text/css">
++    <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
+ </head>
+ <body dir="rtl">
+ 
++<div>
++    <header>
++        <div class="container items">
++            <p>ثبت درخواست</p>
++        </div>
++    </header>
++</div>
++
++<br><br><br><br><br>
++
+ <table id="history_table" style="width:70%" border="1px solid black" >
+-    <tr id="tableHeaders">
++    <tr>
+         <th>نام کاربری</th>
+         <th>تاریخ</th>
+         <th>موضوع</th>
+@@ -29,53 +36,18 @@
+     <!--        <td id="description">dfsd</td>-->
+     <!--        <td id="condition">sadlk</td>-->
+     <!--    </tr>-->
++
+ </table>
++
++<br><br><br><br><br><br>
++
++
+ <div>
+-    <button data-target="#myModal" data-toggle="modal" id="modalActionBtn0" style="width: 100%; visibility: hidden;"
+-            type="button">
+-        انجام اقدام
+-    </button>
+-</div>
+-
+-<div class="container">
+-
+-    <div class="modal" id="myModal">
+-        <div class="modal-dialog modal-lg">
+-            <div class="modal-content">
+-
+-                <div class="modal-header">
+-                    <h4 class="modal-title">اقدام</h4>
+-                </div>
+-
+-                <div class="modal-body">
+-                    <textarea id="lastUserDescription" style="width: 100%;"></textarea>
+-                    نوع اقدام :<select id="actionType" name="role">
+-                    <option value="1">در حال بررسی</option>
+-                    <option value="2">تعویق</option>
+-                    <option value="3">خاتمه</option>
+-                    <option value="4">ارجاع</option>
+-                </select>
+-                    دریافت کننده :<select id="receiverName" name="role1" style="margin:5px;">
+-                    <option value="null"></option>
+-                </select>
+-
+-                    <br>
+-                    پاراف<input id="paraf" style="width: 100%;" type="text">
+-
+-
+-                </div>
+-
+-                <div class="modal-footer">
+-                    <button data-dismiss="modal" type="button">انصراف</button>
+-                    <button data-dismiss="modal" onclick="takeAction()" style="margin-left: 10px; margin-right: 10px;"
+-                            type="button">اقدام
+-                    </button>
+-                </div>
+-
+-            </div>
++    <footer>
++        <div class="container items">
++            <p class="lg-show">تمامی حقوق وبسایت نزد دانشگاه شهید بهشتی محفوظ است.</p>
+         </div>
+-    </div>
+-
++    </footer>
+ </div>
+ 
+ </body>
+@@ -85,86 +57,10 @@
+     var currentCase;
+     var nameTOusernameMap = new Map();
+     var usersList = JSON.parse(localStorage.getItem("temp"));
+-    var counter = 0;
+-    var thisUserSeen = new Map();
+-    var satisficationButtonTOcase = new Map();
+-    var satisficationCounter = 0;
+-    var nn;
+-    document.addEventListener("click", function (evnt) {
+-        if (event.target.id.substr(0, 14) == "modalActionBtn") {
+-            sessionStorage.setItem("num", evnt.target.id.substring(14));
+-            nn = sessionStorage.getItem("num");
+-            document.getElementById("lastUserDescription").innerHTML = thisUserSeen.get(Number(nn)).description;
+-
+-            for (var i = 0; i < usersList.main.length; i++) {
+-                role = usersList.main[i].role;
+-                if (role == 1 || role == 3) {
+-                    var option = document.createElement("option");
+-                    option.value = usersList.main[i].username;
+-                    option.text = usersList.main[i].name;
+-                    document.getElementById("receiverName").appendChild(option);
+-                }
+-            }
+-
+-        }
+-        else if (event.target.id.substr(0 , 5) == "satis"){
+-            var satisToBechanged = satisficationButtonTOcase.get(event.target.id);
+-            for (var m =0; m<caseData.main.length; m++){
+-                if (caseData.main[m].sender == satisToBechanged.sender && caseData.main[m].receiver == satisToBechanged.receiver && caseData.main[m].description == satisToBechanged.description) {
+-                    if (event.target.id.charAt(5) == "o"){
+-                        caseData.main[m].satisfied = "1";
+-                    } else {
+-                        caseData.main[m].satisfied = "0";
+-                    }
+-                    localStorage.setItem("cases",JSON.stringify(caseData));
+-                    break;
+-                }
+-            }
+-            location.reload();
+-        }
+-    });
+-
+-    function takeAction() {
+-        // console.log("take action first line");
+-        var paraf = document.getElementById("paraf").value;
+-        var actionType = document.getElementById("actionType").value;
+-        var refreshData = thisUserSeen.get(Number(nn));
+-        var newReceiver = document.getElementById("receiverName").value;
+-        var index;
+-        for (var u = 0; u < caseData.main.length; u++) {
+-            if (caseData.main[u] == thisUserSeen.get(Number(nn))) {
+-                index = u;
+-                break;
+-            }
+-        }
+-        // console.log(newReceiver);
+-        // console.log(actionType);
+-        // console.log(refreshData);
+-        if (actionType == "4") {
+-            var today = new Date();
+-            var dd = String(today.getDate()).padStart(2, '0');
+-            var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+-            var yyyy = today.getFullYear();
+-            today = mm + '/' + dd + '/' + yyyy;
+ 
+-            var thisParaf = {date: today, description: paraf, by: refreshData.receiver};
+-            refreshData.paraf.push(thisParaf);
+-            refreshData.receiver = newReceiver;
+-            console.log(refreshData);
+-        } else {
+-            refreshData.condition = Number(actionType);
+-            console.log(refreshData);
+-
+-        }
+-        var newEntries = JSON.parse(localStorage.getItem("cases"));
+-        newEntries.main[index] = refreshData;
+-        localStorage.setItem("cases", JSON.stringify(newEntries));
+-        location.reload();
+-    }
+     if (sessionStorage.getItem("currentUser") == null) {
+         window.location.href = "invokedPage.html"
+-    }
+-    else {
++    } else {
+         sessionUser = sessionStorage.getItem("currentUser");
+         for (var w = 0; w < usersList.main.length; w++) {
+             thisUser = usersList.main[w];
+@@ -178,7 +74,7 @@
+             currentCase = caseData.main[x];
+ 
+             if (sessionUser.role == 0 || (sessionUser.role == 2 && currentCase.sender == sessionUser.username) || ((sessionUser.role == 1 || sessionUser.role == 3) && currentCase.receiver == sessionUser.username)) {
+-                {var tableRow = document.createElement("tr");
++                var tableRow = document.createElement("tr");
+                 var tableData = document.createElement("td");
+                 tableData.innerHTML = currentCase.sender;
+                 tableRow.appendChild(tableData);
+@@ -211,116 +107,27 @@
+                 tableRow.appendChild(tableData);
+ 
+                 var tableData = document.createElement("td");
+-                if (currentCase.description.length > 50) {
+-                    tableData.innerHTML = currentCase.description.substr(0, 50) + " ...";
+-                } else {
+-                    tableData.innerHTML = currentCase.description;
+-                }
+-                // tableData.textOverflow = "ellipsis";
+-                // tableData.overflow = "hidden";
+-                // tableData.whiteSpace = "nowrap";
++                tableData.innerHTML = currentCase.description;
+                 tableRow.appendChild(tableData);
+ 
+                 var tableData = document.createElement("td");
+                 switch (currentCase.condition) {
+                     case 0 :
+-                    case "0" :
+                         tableData.innerHTML = "باز";
+                         break;
+                     case 1 :
+-                    case "1":
+                         tableData.innerHTML = "در حال بررسی";
+                         break;
+                     case 2 :
+-                    case "2":
+                         tableData.innerHTML = "تعویق";
+                         break;
+                     case 3 :
+-                    case "3":
+                         tableData.innerHTML = "بسته";
+                         break;
+                     default :
+                         tableData.innerHTML = currentCase.condition;
+                 }
+-                tableRow.appendChild(tableData);}
+-
+-                if (sessionUser.role == 1 || sessionUser.role == 3) {
+-                    if (document.getElementById("tableHeaders").lastChild.textContent != "اقدام") {
+-                        var actionTableHeader = document.createElement("th");
+-                        actionTableHeader.innerHTML = "اقدام";
+-                        document.getElementById("tableHeaders").appendChild(actionTableHeader);
+-                    }
+-
+-                    var tableData = document.createElement("td");
+-                    var button = document.getElementById("modalActionBtn" + counter);
+-                    button.textContent = "انجام اقدام";
+-                    var clone = button.cloneNode(true);
+-                    clone.id = "modalActionBtn" + ++counter;
+-                    clone.style.visibility = "visible";
+-                    tableData.appendChild(clone);
+-                    tableRow.appendChild(tableData);
+-                    thisUserSeen.set(counter, currentCase);
+-                    // console.log(thisUserSeen);
+-
+-                }
+-
+-                else if (sessionUser.role == 0 || sessionUser.role == 2) {
+-                    if (document.getElementById("tableHeaders").lastChild.textContent != "رضایت") {
+-                        var actionTableHeader = document.createElement("th");
+-                        actionTableHeader.innerHTML = "رضایت";
+-                        document.getElementById("tableHeaders").appendChild(actionTableHeader);
+-                    }
+-                    var tableData = document.createElement("td");
+-
+-                    if (sessionUser.role == 2 && (currentCase.condition == 3 || currentCase.condition == "3")){
+-                        if (currentCase.satisfied == ""){
+-                            var ok = document.createElement("button");
+-                            ok.innerHTML = "✓";
+-                            var notok = document.createElement("button");
+-                            notok.innerHTML = "✕";
+-                            ok.style.width = "50%";
+-                            notok.style.width = "50%";
+-                            ok.id = "satiso"+ ++satisficationCounter;
+-                            notok.id = "satisn" + satisficationCounter;
+-                            satisficationButtonTOcase.set(ok.id, currentCase);
+-                            satisficationButtonTOcase.set(notok.id, currentCase);
+-
+-                            tableData.appendChild(ok);
+-                            tableData.appendChild(notok);
+-                        } else{
+-                            switch (currentCase.satisfied) {
+-                                case "0":
+-                                    tableData.innerHTML = "ناراضی";
+-                                    break;
+-                                case "1":
+-                                    tableData.innerHTML = "راضی";
+-                                    break;
+-                                default:
+-                                    tableData.innerHTML = "در دست بررسی";
+-                                    break;
+-
+-                            }
+-                        }
+-                        tableRow.appendChild(tableData);
+-                    }
+-                    else {
+-                        switch (currentCase.satisfied) {
+-                            case "0":
+-                                tableData.innerHTML = "ناراضی";
+-                                break;
+-                            case "1":
+-                                tableData.innerHTML = "راضی";
+-                                break;
+-                            default:
+-                                tableData.innerHTML = "در دست بررسی";
+-                                break;
+-
+-                        }
+-                        tableRow.appendChild(tableData);
+-                    }
+-
+-                }
+-
++                tableRow.appendChild(tableData);
+ 
+                 document.getElementById("history_table").appendChild(tableRow);
+             }

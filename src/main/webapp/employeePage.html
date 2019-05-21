@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>employeePage</title>
+
+    <link rel="stylesheet" href="./css/global.css" type="text/css">
+    <link rel="stylesheet" href="./css/bootstrap.css" type="text/css">
+</head>
+<body onload="checkvalidity()">
+
+<div>
+    <header>
+        <div class="container items">
+            <p>پنل کارمندان</p>
+        </div>
+    </header>
+</div>
+
+<br><br><br><br><br><br><br>
+
+<div class="btn-group" style="width:100%" align="center">
+    <button id="setting" onclick="goToSetting()" style="width:20%">نظیمات پروفایل</button>
+    <button id="kartabl" onclick="goToHistory()" style="width:20%">کارتابل</button>
+</div>
+
+<br><br>
+
+<div class="logout_btn" align="center">
+    <button id="logOut" onclick="logOut()" style="width:15%">خروج</button>
+</div>
+
+
+<br><br><br><br><br><br>
+
+
+<div>
+    <footer>
+        <div class="container items">
+            <p class="lg-show">تمامی حقوق وبسایت نزد دانشگاه شهید بهشتی محفوظ است.</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+
+<script>
+    function checkvalidity() {
+        if ((JSON.parse(sessionStorage.getItem("userjson"))) == null) {
+            window.location.href = "invokedPage.html"
+        }
+        else if((JSON.parse(sessionStorage.getItem("userjson"))).role == 2 || (JSON.parse(sessionStorage.getItem("userjson"))).role == "2")
+        {
+            window.location.href = "studentPage.html"
+        }
+        else if((JSON.parse(sessionStorage.getItem("userjson"))).role == 0 || (JSON.parse(sessionStorage.getItem("userjson"))).role == "0")
+        {
+            window.location.href = "adminPage.html"
+        }
+
+    }
+
+    function logOut() {
+        sessionStorage.removeItem("userjson");
+        window.location.href = "invokedPage.html"
+    }
+
+    function goToSetting() {
+        window.location.href = "settingpage.html";
+    }
+
+    function goToHistory() {
+        window.location.href = "kartablHistoryPage.html";
+    }
+
+</script>
+</html>

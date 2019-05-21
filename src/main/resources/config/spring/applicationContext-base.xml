@@ -21,12 +21,12 @@
 	</bean>
 
 	<bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean" lazy-init="true"  >
-		<property name="jndiName"><value>${hibernate.datasource.jndi}</value></property>
-		<property name="lookupOnStartup"> 
-            <value>false</value> 
-        </property> 
-		<property name="proxyInterface"> 
-			<value>javax.sql.DataSource</value> 
+		<property name="jndiName"><value>java:comp/env/jdbc/worldDB</value></property>
+		<property name="lookupOnStartup">
+            <value>false</value>
+        </property>
+		<property name="proxyInterface">
+			<value>javax.sql.DataSource</value>
 		</property>
 	</bean>
 
@@ -38,7 +38,7 @@
       </property>
       <property name="jpaProperties">
          <props>
-			<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop> 
+			<prop key="hibernate.hbm2ddl.auto">${hibernate.hbm2ddl.auto}</prop>
 			<prop key="hibernate.show_sql">${hibernate.connection.show_sql}</prop>
          </props>
       </property>

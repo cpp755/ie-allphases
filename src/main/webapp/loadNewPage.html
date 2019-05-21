@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:top="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>سامانه رفع مشکلات دانشگاه شهید بهشتی</title>
+    <link rel="stylesheet" href="./css/login.css" type="text/css">
+    <link rel="stylesheet" href="./css/global.css" type="text/css">
+    <link rel="stylesheet" href="./css/bootstrap.css" type="text/css">
+
+</head>
+<body dir="rtl">
+
+<div align="center">
+    <nav class="menu-top">
+        <header>
+            <div class="container items">
+                <p>ورود</p>
+            </div>
+        </header>
+    </nav>
+
+    <br><br>
+
+    <div align="center" class="col-lg-4 form-content">
+            <div class="form-group input">
+                <input type="text" id="name" autocomplete="off" placeholder="نام و نام خانوادگی" class="form-control" required="" onclick="setDefaultColor(this.id)">
+                <label class="form-control-placeholder" for="un">نام و نام خانوادگی</label>
+            </div>
+            <div class="form-group input">
+                <input type="text" id="un" autocomplete="off" placeholder="نام کاربری" class="form-control" onclick="setDefaultColor(this.id)" required="">
+                <label class="form-control-placeholder" for="un">نام کاربری</label>
+            </div>
+            <div class="form-group input">
+                <input type="password" autocomplete="off" id="pw" placeholder="رمز عبور" class="form-control" onclick="setDefaultColor(this.id)" required="">
+                <label class="form-control-placeholder" for="pw">رمز عبور</label>
+            </div>
+            <div class="form-group input">
+                <input type="password" autocomplete="off" id="pwrep" placeholder="تکرار رمز عبور" class="form-control" onclick="setDefaultColor(this.id)" required="">
+                <label class="form-control-placeholder" for="pw">تکرار رمز عبور</label>
+            </div>
+            <div>
+                نقش : <br><select id="role" name="role" autocomplete="off" class="col-lg-4" onclick="setDefaultColor(this.id)" required="">
+                <option value="null"></option>
+                <option value="2">دانشجو</option>
+                <option value="3">کارمند</option>
+                <option value="1">استاد</option>
+            </select>
+            </div>
+            <div class="form-group button">
+                <button class="btn btn-success btn-sm btn-block mt-3" id="savedatas" onclick="checkInputs()" type="submit"> ثبت نام </button>
+                <button class="btn btn-danger btn-sm btn-block mt-3" id="login" onclick="openLoginPage()" type="submit"> ورود <i class="fab fa-google"></i></button>
+            </div>
+    </div>
+
+
+
+    <div>
+        <footer class="footer" style="background-color: #3e8e41">
+            <div class="container items">
+                <p class="lg-show">تمامی حقوق وبسایت نزد دانشگاه شهید بهشتی محفوظ است.</p>
+            </div>
+        </footer>
+    </div>
+
+</div>
+
+<script>
+    var name, user, pass, passRep, role;
+
+    function openLoginPage() {
+        window.location.href = "invokedPage.html";
+    }
+
+    function setDefaultColor(el) {
+        document.getElementById(el).style.borderColor = "#000000"
+    }
+
+    function checkInputs() {
+        name = document.getElementById("name").value;
+        user = document.getElementById("un").value;
+        pass = document.getElementById("pw").value;
+        passRep = document.getElementById("pwrep").value;
+        role = document.getElementById("role").value;
+
+        if (name == null || name.length < 4) {
+            document.getElementById("name").style.borderColor = "#ff0000"
+        } else if (passRep != pass) {
+            document.getElementById("pwrep").style.borderColor = "#ff0000"
+        } else if (role != 1 & role != 2 & role != 3) {
+            document.getElementById("role").style.borderColor = "#ff0000"
+        }
+        else {
+            save();
+        }
+    }
+
+    function save() {
+        if (role == 2 || role == "2") {
+            var currentUser = {name: name, username: user, pass: pass, role: role, verified: "1"};
+        } else {
+            var currentUser = {name: name, username: user, pass: pass, role: role, verified: "0"};
+        }
+
+
+        var sentJSON = JSON.stringify(currentUser);
+        const Http = new XMLHttpRequest();
+        const url='http://localhost:8080/contacts/rest/contact/signup';
+        Http.open("POST", url, true);
+        Http.setRequestHeader("Content-type", "application/json");
+        Http.send(sentJSON);
+        Http.onreadystatechange = function () {
+            if (Http.readyState == XMLHttpRequest.DONE) {
+                alert(Http.responseText);
+                document.getElementById("name").value = '';
+                document.getElementById("un").value = '';
+                document.getElementById("pw").value = '';
+                document.getElementById("pwrep").value = '';
+                document.getElementById("role").value = '';
+            }
+        }
+    }
+
+</script>
+</body>
+</html>

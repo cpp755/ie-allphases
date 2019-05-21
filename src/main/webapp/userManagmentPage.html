@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>userManagementPage</title>
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./css/login.css" type="text/css">
+    <link rel="stylesheet" href="./css/global.css" type="text/css">
+    <link rel="stylesheet" href="./css/bootstrap.css" type="text/css">
+
+</head>
+<body dir="rtl">
+<div>
+    <header>
+        <div class="container items">
+            <p>مدیریت کاربران</p>
+        </div>
+    </header>
+</div>
+<div align="center">
+    <table border="1px solid black" id="user_Management_table" style="width:90%; height: 70%;">
+        <tr>
+            <th>نام</th>
+            <th>نام کاربری</th>
+            <th>نقش</th>
+            <th>وضیعت</th>
+<!--            <th>حذف</th>-->
+        </tr>
+
+    </table>
+    <br><br>
+    <div>
+        <footer class="footer" style="background-color: #3e8e41">
+            <div class="container items">
+                <p class="lg-show">تمامی حقوق وبسایت نزد دانشگاه شهید بهشتی محفوظ است.</p>
+            </div>
+        </footer>
+    </div>
+
+</div>
+</body>
+
+
+<script>
+    var currentUser;
+    document.addEventListener("click", function (evnt) {
+        var str = ""+event.target.id;
+        var user = {user:str};
+        const Http = new XMLHttpRequest();
+        const url='http://localhost:8080/contacts/rest/contact/usertoggle';
+        Http.open("POST", url, true);
+        Http.setRequestHeader("Content-type", "application/json");
+        Http.send(JSON.stringify(user));
+        Http.onreadystatechange = function () {
+            if (Http.readyState == XMLHttpRequest.DONE) {
+                location.reload();
+            }
+        };
+    });
+
+    var sentJSON = {null:"null"};
+    const Http = new XMLHttpRequest();
+    const url='http://localhost:8080/contacts/rest/contact/usermanagement';
+    Http.open("GET", url, true);
+    Http.setRequestHeader("Content-type", "application/json");
+    Http.send(sentJSON);
+    Http.onreadystatechange = function () {
+        if (Http.readyState == XMLHttpRequest.DONE) {
+            var usersData = JSON.parse(Http.responseText);
+
+
+            for (var x = 0; x < usersData.main.length; x++) {
+                currentUser = usersData.main[x];
+                var tableRow = document.createElement("tr");
+                var tableData = document.createElement("td");
+                tableData.innerHTML = currentUser.name;
+                tableRow.appendChild(tableData);
+
+                var tableData = document.createElement("td");
+                tableData.innerHTML = currentUser.username;
+                tableRow.appendChild(tableData);
+
+                var tableData = document.createElement("td");
+                switch (currentUser.role) {
+                    case "0":
+                        tableData.innerHTML = "مدیر سیستم";
+                        break;
+                    case "1" :
+                        tableData.innerHTML = "استاد";
+                        break;
+                    case "2" :
+                        tableData.innerHTML = "دانشجو";
+                        break;
+                    case "3" :
+                        tableData.innerHTML = "کارمند";
+                        break;
+                    default :
+                        tableData.innerHTML = currentUser.role;
+                }
+                tableRow.appendChild(tableData);
+
+                var tableData = document.createElement("td");
+                switch (currentUser.verified) {
+                    case "0" :
+                        var tableData = document.createElement("td");
+                        var ok = document.createElement("button");
+                        ok.innerHTML = "✓";
+                        ok.style.width = "100%";
+                        ok.id = currentUser.username;
+                        tableData.appendChild(ok);
+                        tableRow.appendChild(tableData);
+                        break;
+                    case "1" :
+                        if (currentUser.role == "2" || currentUser.role == "0") {
+                        } else {
+                            var tableData = document.createElement("td");
+                            var notok = document.createElement("button");
+                            notok.innerHTML = "✕";
+                            notok.style.width = "100%";
+                            notok.id = currentUser.username;
+                            tableData.appendChild(notok);
+                            tableRow.appendChild(tableData);
+                        }
+                        break;
+                    default :
+                        tableData.innerHTML = currentUser.verified;
+                }
+                tableRow.appendChild(tableData);
+
+                document.getElementById("user_Management_table").appendChild(tableRow);
+
+            }
+        }
+    };
+</script>
+</html>

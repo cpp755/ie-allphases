@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>addCasePage</title>
+
+    <link rel="stylesheet" href="./css/global.css" type="text/css">
+    <link rel="stylesheet" href="./css/bootstrap.css" type="text/css">
+</head>
+<body dir="rtl">
+
+<div>
+    <header>
+        <div class="container items">
+            <p>ثبت درخواست</p>
+        </div>
+    </header>
+</div>
+
+<br><br><br><br><br>
+
+<div align="center">
+    <br>
+
+    دریافت کننده :<select id="receiverName" name="role1" style="margin:5px;">
+    <option value="null"></option>
+</select>
+
+
+    موضوع :<select id="titleName" name="role2" style="margin:5px;">
+    <option value="null"></option>
+    <option value="1">شکایت</option>
+    <option value="2">انتقاد</option>
+    <option value="3">پیشنهاد</option>
+    <option value="3">درخواست</option>
+</select>
+
+    <br>
+
+    <textarea cols="50" id="description" rows="4"></textarea>
+    <br><br>
+    <input id="laghvBtn" onclick="goBack()" type="submit" value="لغو">
+    <input id="sendBtn" onclick="sendCase()" type="submit" value="ارسال">
+
+</div>
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+<div>
+    <footer class="footer" style="background-color: #3e8e41">
+        <div class="container items">
+            <p class="lg-show">تمامی حقوق وبسایت نزد دانشگاه شهید بهشتی محفوظ است.</p>
+        </div>
+    </footer>
+</div>
+</body>
+<script>
+
+    var role;
+
+    var sentJSON = {null:"null"};
+    const Http = new XMLHttpRequest();
+    const url='http://localhost:8080/contacts/rest/contact/validcasereceiver';
+    Http.open("GET", url, true);
+    Http.setRequestHeader("Content-type", "application/json");
+    Http.send(sentJSON);
+    Http.onreadystatechange = function () {
+        if (Http.readyState == XMLHttpRequest.DONE) {
+            if (Http.responseText == null || Http.responseText == ""){
+                alert("گیرنده ای یافت نشد");
+            }
+            else {
+                var receivers = JSON.parse(Http.responseText);
+                 for (var i=0;i<receivers.main.length;i++){
+                     var option = document.createElement("option");
+                     option.value = receivers.main[i];
+                     option.text = receivers.main[i];
+                     document.getElementById("receiverName").appendChild(option);
+                 }
+            }
+        }
+    };
+
+    function goBack() {
+        window.location.href = "studentPage.html"
+    }
+    function sendCase() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = mm + '/' + dd + '/' + yyyy;
+
+        var description = document.getElementById("description").value;
+        var sender = (JSON.parse(sessionStorage.getItem("userjson"))).username;
+        var receiver = document.getElementById("receiverName").value;
+        var title = document.getElementById("titleName").value;
+        var condition = "0";
+        if (description == null || description == "" || receiver == null || receiver == "" || title == null || title == ""){
+            alert("لطفا فرم را کامل فرمایید.");
+        }
+        else {
+            var caseContent = {
+                sender: sender,
+                receiver: receiver,
+                description: description,
+                title: title,
+                date: today,
+                condition: condition,
+                satisfied: "",
+                paraf: ""
+            };
+
+            const Http = new XMLHttpRequest();
+            const url='http://localhost:8080/contacts/rest/contact/savecase';
+            Http.open("POST", url, true);
+            Http.setRequestHeader("Content-type", "application/json");
+            Http.send(JSON.stringify(caseContent));
+            Http.onreadystatechange = function () {
+                if (Http.readyState == XMLHttpRequest.DONE) {
+                    if (Http.responseText == null || Http.responseText == ""){
+                        alert("خطا در ذخیره سازی مورد");
+                    }
+                    else {
+                        document.getElementById("description").value = '';
+                        document.getElementById("receiverName").selectedIndex = 0;
+                        document.getElementById("titleName").selectedIndex = 0;
+                        alert(Http.responseText);
+                    }
+                }
+            }
+
+        }
+    }
+</script>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+
+    <link rel="stylesheet" href="./css/login.css" type="text/css">
+    <link rel="stylesheet" href="./css/global.css" type="text/css">
+    <link rel="stylesheet" href="./css/bootstrap.css" type="text/css">
+
+</head>
+<body>
+<div align="center">
+    <nav class="menu-top">
+        <header>
+            <div class="container items">
+                <p>ثبت نام</p>
+            </div>
+        </header>
+    </nav>
+
+    <br><br>
+
+    <div align="center" class="col-lg-4 form-content">
+            <div class="form-group input">
+                <input type="text" id="un" autocomplete="off" placeholder="نام کاربری" name="username" class="form-control" required="">
+                <label class="form-control-placeholder" for="un">نام کاربری</label>
+            </div>
+            <div class="form-group input">
+                <input type="password" autocomplete="off" id="pw" placeholder="رمز عبور" name="password" class="form-control" required="">
+                <label class="form-control-placeholder" for="pw">رمز عبور</label>
+            </div>
+            <div class="form-group button">
+                <button class="btn btn-success btn-sm btn-block mt-3" id="login" onclick="authenticate()" type="submit"> ورود </button>
+                <button class="btn btn-danger btn-sm btn-block mt-3" onclick="openSignUp()" type="submit"> ثبت نام</button>
+            </div>
+    </div>
+
+
+    <div>
+        <footer class="footer" style="background-color: #3e8e41">
+            <div class="container items">
+                <p class="lg-show">تمامی حقوق وبسایت نزد دانشگاه شهید بهشتی محفوظ است.</p>
+            </div>
+        </footer>
+    </div>
+
+</div>
+
+
+<script>
+    function openSignUp() {
+        window.location.href = "loadNewPage.html";
+    }
+
+    function authenticate() {
+        var user = document.getElementById("un").value;
+        var pass = document.getElementById("pw").value;
+
+        var checkUser = { username: user, pass: pass};
+
+
+        var sentJSON = JSON.stringify(checkUser);
+        const Http = new XMLHttpRequest();
+        const url='http://localhost:8080/contacts/rest/contact/signin';
+        Http.open("POST", url, true);
+        Http.setRequestHeader("Content-type", "application/json");
+        Http.send(sentJSON);
+        Http.onreadystatechange = function () {
+            if (Http.readyState == XMLHttpRequest.DONE) {
+                if (Http.responseText == null || Http.responseText == "") {
+                    alert("حسابی با این نام کاربری و رمز عبور یافت نشد.");
+                }else {
+                    sessionStorage.setItem("userjson",Http.responseText);
+
+                    switch ((JSON.parse(sessionStorage.getItem("userjson"))).role) {
+                        case "0" :
+                            window.location.href = "adminPage.html";
+                            break;
+                        case "1" :
+                            window.location.href = "employeePage.html";
+                            break;
+                        case "2" :
+                            window.location.href = "studentPage.html";
+                            break;
+                        case "3" :
+                            window.location.href = "employeePage.html";
+                            break;
+                        default :
+                    }
+                }
+
+            }
+        };
+    }
+
+</script>
+
+
+</body>
+</html>

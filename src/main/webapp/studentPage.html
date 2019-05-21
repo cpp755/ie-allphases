@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>studentPage</title>
+
+    <link rel="stylesheet" href="./css/global.css" type="text/css">
+    <link rel="stylesheet" href="./css/bootstrap.css" type="text/css">
+
+</head>
+<body onload="checkvalidity()">
+
+<div>
+    <header>
+        <div class="container items">
+            <p>پنل دانشجویان</p>
+        </div>
+    </header>
+</div>
+
+<br><br><br><br><br><br><br>
+
+<div class="btn-group" style="width:100%" align="center">
+    <button id="setting" onclick="goToSetting()" style="width:20%">نظیمات پروفایل</button>
+    <button id="newCase" onclick="goToAddCase()" style="width:20%">ثبت مورد جدید</button>
+    <button id="history" onclick="goToHistory()" style="width:20%">وضیعت موارد فعلی</button>
+</div>
+
+<br><br>
+
+<div class="logout_btn" align="center">
+    <button id="logOut" onclick="logOut()" style="width:15%">خروج</button>
+</div>
+
+
+<br><br><br><br><br><br>
+
+
+<div>
+    <footer class="footer" style="background-color: #3e8e41">
+        <div class="container items">
+            <p class="lg-show">تمامی حقوق وبسایت نزد دانشگاه شهید بهشتی محفوظ است.</p>
+        </div>
+    </footer>
+</div>
+
+</body>
+
+<script>
+
+    function checkvalidity() {
+        if ((JSON.parse(sessionStorage.getItem("userjson"))) == null)
+        {
+                window.location.href = "invokedPage.html"
+        }
+        else if ((JSON.parse(sessionStorage.getItem("userjson"))).role == 3 || (JSON.parse(sessionStorage.getItem("userjson"))).role == "3" || (JSON.parse(sessionStorage.getItem("userjson"))).role == 1 || (JSON.parse(sessionStorage.getItem("userjson"))).role == "1")
+        {
+                window.location.href = "employeePage.html"
+        }
+        else if((JSON.parse(sessionStorage.getItem("userjson"))).role == 0 || (JSON.parse(sessionStorage.getItem("userjson"))).role == "0")
+        {
+            window.location.href = "adminPage.html"
+        }
+    }
+    function goToSetting() {
+        window.location.href = "settingpage.html";
+    }
+
+    function goToAddCase() {
+        window.location.href = "addCasePage.html";
+    }
+
+    function goToHistory() {
+        window.location.href = "kartablHistoryPage.html";
+    }
+
+    function logOut() {
+        sessionStorage.removeItem("userjson");
+        window.location.href = "invokedPage.html"
+    }
+</script>
+</html>
+
